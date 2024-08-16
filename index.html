@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Botion Custom Controllers</title>
+    <link rel="icon" href="BCC-logo.png" type="image/png">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000000;
+            --text-color: #333;
+            --bg-color: #ffffff;
+            --secondary-bg: #f7f7f7;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .topnav {
+            background-color: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(10px);
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 20px;
+            transition: all 0.3s ease;
+        }
+
+        .topnav.scrolled {
+            background-color: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .topnav .logo {
+            font-size: 24px;
+            font-weight: bold;
+            color: var(--primary-color);
+            text-decoration: none;
+        }
+
+        .topnav #myLinks {
+            display: flex;
+        }
+
+        .topnav a {
+            color: var(--text-color);
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+            transition: color 0.3s ease;
+        }
+
+        .topnav a:hover {
+            color: var(--primary-color);
+        }
+
+        .topnav .icon {
+            display: none;
+        }
+
+        #hero {
+            position: relative;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            align-items: center;
+            text-align: center;
+            background: url('background-image.png') no-repeat center center;
+            background-size: contain;
+            padding-top: 60px;
+        }
+
+        #hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 50%;
+            background: linear-gradient(to bottom, rgba(0, 0, 0, 0.6) 0%, rgba(0, 0, 0, 0) 100%);
+            z-index: 1;
+        }
+
+        #hero .container {
+            position: relative;
+            z-index: 2;
+            color: white;
+        }
+
+        #hero h1 {
+            font-size: 4rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        #hero p {
+            font-size: 1.75rem;
+            margin-top: 0;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+
+        .stylized-flag {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 60px;
+            height: 40px;
+            background-color: rgba(255, 255, 255, 0.2);
+            clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 50% 75%, 0% 100%);
+            z-index: 3;
+        }
+
+        .cta-button {
+            background-color: #ffffff;
+            color: rgb(0, 0, 0);
+            border: none;
+            padding: 12px 24px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin-top: 20px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: all 0.3s ease;
+        }
+
+        .cta-button:hover {
+            background-color: #27ae60;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .feature {
+            background-color: var(--secondary-bg);
+            margin: 40px 0;
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        #faq {
+            background-color: var(--secondary-bg);
+            padding: 40px;
+            margin-top: 40px;
+            border-radius: 8px;
+        }
+
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question h3 {
+            font-weight: 600;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .question h3:hover {
+            color: var(--primary-color);
+        }
+
+        .question p {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease, opacity 0.5s ease;
+            opacity: 0;
+        }
+
+        .question.active p {
+            max-height: 1000px;
+            opacity: 1;
+        }
+
+        footer {
+            background-color: var(--secondary-bg);
+            color: var(--text-color);
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+        }
+
+        .tool-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .tool-item {
+            text-align: center;
+        }
+
+        .tool-item img {
+            width: 100%;
+            max-width: 200px;
+            height: auto;
+            margin-bottom: 10px;
+        }
+
+        .installation-steps {
+            margin-top: 40px;
+        }
+
+        .installation-steps ol {
+            padding-left: 20px;
+        }
+
+        .installation-steps li {
+            margin-bottom: 10px;
+        }
+
+        @media screen and (max-width: 750px) {
+            .topnav #myLinks {
+                display: none;
+                flex-direction: column;
+                width: 100%;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                background-color: rgba(255, 255, 255, 0.95);
+            }
+
+            .topnav a {
+                padding: 15px;
+                text-align: left;
+            }
+
+            .topnav .icon {
+                display: block;
+                position: absolute;
+                right: 20px;
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .topnav.responsive #myLinks {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="topnav" id="myTopnav">
+        <a href="#home" class="logo">BCC</a>
+        <div id="myLinks">
+            <a href="#features">Features</a>
+            <a href="#pricing">Buy</a>
+            <a href="#how-it-works">How-To</a>
+            <a href="#faq">FAQ</a>
+        </div>
+        <a href="javascript:void(0);" class="icon" onclick="toggleMenu()">
+            <i class="fas fa-bars"></i>
+        </a>
+    </nav>
+
+    <section id="hero">
+        <div class="stylized-flag"></div>
+        <div class="container">
+            <h1>BCC</h1>
+            <p>New-Age GCC MCU Has Arrived</p>
+            <a href="#features" class="cta-button">Learn more</a>
+        </div>
+    </section>
+
+    <div class="container">
+        <section id="features">
+            <h2>Features</h2>
+            <div class="feature">
+                <h3>Joystick Recalibration</h3>
+                <p>Achieve pinpoint accuracy with our advanced joystick recalibration technology.</p>
+            </div>
+            <div class="feature">
+                <h3>Snapback Filtering</h3>
+                <p>Eliminate unwanted inputs with our cutting-edge snapback filtering system.</p>
+            </div>
+            <div class="feature">
+                <h3>Button Remapping</h3>
+                <p>Customize your controller layout for optimal performance and comfort.</p>
+            </div>
+            <div class="feature">
+                <h3>Notch Calibration</h3>
+                <p>Perfect your shield drops and precise angles with our notch calibration feature.</p>
+            </div>
+        </section>
+
+        <section id="pricing">
+            <h2>Buy</h2>
+            <p>Contact us for pricing information and to place an order. We are currently in Beta, aiming to release Fall 2024. Please contact @<b>Bread_</b> on Discord for any inquiries. </p>
+            <!-- Add more detailed pricing information here -->
+        </section>
+
+        <section id="how-it-works">
+            <h2>How-To</h2>
+            <h3>Required Tools</h3>
+            <div class="tool-grid">
+                <div class="tool-item">
+                    <p>1. Soldering Iron</p>
+                </div>
+                <div class="tool-item">
+                    <p>2. Hot Air Gun</p>
+                </div>
+                <div class="tool-item">
+                    <p>3. Flux</p>
+                </div>
+                <div class="tool-item">
+                    <p>4. Electronics Screwdriver Kit</p>
+                </div>
+            </div>
+
+            <div class="installation-steps">
+                <h3>Installation Process: Replacing the Default MCU (Video In-Progress)</h3>
+                <ol>
+                    <li>Disassemble the GameCube controller carefully using your electronics screwdriver kit.</li>
+                    <li>Locate the default MCU on the controller's circuit board.</li>
+                    <li>Apply flux around the MCU's pins to facilitate removal.</li>
+                    <li>Use the hot air gun to heat the MCU evenly, then carefully remove it from the board.</li>
+                    <li>Clean the board and prepare the pads for the new MCU.</li>
+                    <li>Position the BCC MCU onto the prepared pads.</li>
+                    <li>Use the soldering iron to carefully solder each pin of the new MCU to the board.</li>
+                    <li>Inspect your work to ensure all connections are secure and there are no shorts.</li>
+                    <li>Reassemble the controller and test all functions.</li>
+                    <li>Calibrate the new MCU using the BCC software for optimal performance.</li>
+                </ol>
+            </div>
+        </section>
+
+        <section id="faq">
+            <h2>Frequently Asked Questions</h2>
+            <div class="question">
+                <h3>What makes BCC different from other GameCube controller mods?</h3>
+                <p>BCC offers a comprehensive suite of performance enhancements, including joystick recalibration,
+                    snapback filtering, button remapping, and notch calibration, all in one package.</p>
+            </div>
+            <div class="question">
+                <h3>Is the BCC MCU compatible with all GameCube controllers?</h3>
+                <p>The BCC MCU is designed to be compatible with original Nintendo GameCube controllers. Compatibility
+                    with third-party controllers may vary.</p>
+            </div>
+            <div class="question">
+                <h3>How difficult is it to install the BCC MCU?</h3>
+                <p>Installation requires some technical skill and experience with soldering. We recommend having it
+                    installed by a professional if you're not comfortable with the process.</p>
+            </div>
+            <div class="question">
+                <h3>Does installing the BCC MCU void my controller's warranty?</h3>
+                <p>Yes, modifying your controller by installing the BCC MCU will void the original manufacturer's
+                    warranty. However, we offer our own warranty on the BCC MCU itself.</p>
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Botion Custom Controllers. All rights reserved.</p>
+    </footer>
+
+    <script>
+        function toggleMenu() {
+            var x = document.getElementById("myTopnav");
+            if (x.className === "topnav") {
+                x.className += " responsive";
+            } else {
+                x.className = "topnav";
+            }
+        }
+
+        // FAQ accordion functionality
+        const questions = document.querySelectorAll('.question');
+        questions.forEach(question => {
+            question.addEventListener('click', () => {
+                question.classList.toggle('active');
+            });
+        });
+
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Update navigation bar on scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.querySelector('.topnav');
+            if (window.scrollY > 50) {
+                nav.classList.add('scrolled');
+            } else {
+                nav.classList.remove('scrolled');
+            }
+        });
+    </script>
+</body>
+
+</html>
