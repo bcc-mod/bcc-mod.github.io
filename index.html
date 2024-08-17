@@ -247,6 +247,13 @@
                 display: block;
             }
         }
+        #payment {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            margin-top: 2rem;
+        }
     </style>
 </head>
 
@@ -295,9 +302,17 @@
 
         <section id="pricing">
             <h2>Buy</h2>
-            <p>Contact us for pricing information and to place an order. We are currently in Beta, aiming to release
-                Fall 2024.</p>
+            <div id="payment">
+            <script async src="https://js.stripe.com/v3/buy-button.js">
+            </script>
+            
+            <stripe-buy-button buy-button-id="buy_btn_1Poqw2CJ07lOkLzsE3hCmO7G"
+                publishable-key="pk_live_51PB3zUCJ07lOkLzsUiWON6eaKhTOT2ykpo2hQprF88V2EIuR8MO16ay9H9adAFjqgPoaezeSokIpqqtizxAz7gcl00TKsDTDIZ">
+            </stripe-buy-button>
+        </div>
+            <p>We are currently in Beta, aiming to release Fall 2024.</p>
             <p>Please contact <strong>@Bread_</strong> on Discord for any inquiries.</p>
+
         </section>
 
         <section id="how-it-works">
